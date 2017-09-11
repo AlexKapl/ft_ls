@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tabdel.c                                        :+:      :+:    :+:   */
+/*   ft_strisdigit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/30 16:31:27 by akaplyar          #+#    #+#             */
-/*   Updated: 2017/04/30 16:33:16 by akaplyar         ###   ########.fr       */
+/*   Created: 2017/08/28 10:56:59 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/08/28 10:57:00 by akaplyar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_tabdel(char **tab, int count)
+int			ft_strisdigit(const char *str)
 {
-	int i;
-
-	i = 0;
-	if (count < 0)
-		while (tab[i])
-			free(tab[i++]);
-	else
-		while (i < count)
-			free(tab[i++]);
-	free(tab);
+	while (*str)
+	{
+		if (!(*str >= '0' && *str <= '9'))
+			return (0);
+		str++;
+	}
+	return (1);
 }

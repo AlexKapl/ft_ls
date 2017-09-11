@@ -29,7 +29,7 @@ static char	*parse_color2(char *format, t_form *form, int *size)
 		ft_putstr("\x1B[36m\0");
 		return (format + 6);
 	}
-	else if (!ft_strncmp(format, "{white}", 7))
+	else if (!ft_strncmp(format, "{black}", 7))
 	{
 		ft_putstr("\x1B[37m\0");
 		return (format + 7);
@@ -40,7 +40,7 @@ static char	*parse_color2(char *format, t_form *form, int *size)
 
 static char	*parse_color(char *format, t_form *form, int *size)
 {
-	if (!ft_strncmp(format, "{black}", 7))
+	if (!ft_strncmp(format, "{white}", 7))
 	{
 		ft_putstr("\x1B[30m\0");
 		return (format + 7);
@@ -55,10 +55,10 @@ static char	*parse_color(char *format, t_form *form, int *size)
 		ft_putstr("\x1B[32m\0");
 		return (format + 7);
 	}
-	else if (!ft_strncmp(format, "{yellow}", 9))
+	else if (!ft_strncmp(format, "{yellow}", 8))
 	{
 		ft_putstr("\x1B[33m\0");
-		return (format + 9);
+		return (format + 8);
 	}
 	else
 		return (parse_color2(format, form, size));

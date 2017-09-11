@@ -11,17 +11,12 @@
 # **************************************************************************** #
 
 HEADER = $(PRINTF_PATH)ft_printf.h stack_queue/stack_queue.h libft.h
-
-CC = @gcc
-
-CFLAGS = -Wall -Wextra -Werror
-
 PRINTF_PATH = ./ft_printf/
 
-vpath %.c $(PRINTF_PATH)
+CC = @gcc
+CFLAGS = -Wall -Wextra -Werror
 
-vpath %.h $(PRINTF_PATH) stack_queue/
-
+.PHONY: clean fclean re
 
 OBJECT = ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o ft_isdigit.o ft_isprint.o\
 		 ft_memcpy.o ft_memcmp.o ft_memchr.o ft_memmove.o ft_memset.o ft_memccpy.o\
@@ -36,16 +31,13 @@ OBJECT = ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o ft_isdigit.o ft_ispri
 		 ft_lstdel.o ft_isspace.o ft_realloc.o ft_abs.o ft_int_sort.o ft_strrev.o\
 		 ft_lst_push_back.o get_next_line.o ft_lstcount.o ft_strcapitalizer.o\
 		 ft_atoi_base.o hsv.o hsv_colors.o ft_llitoa.o ft_lst_sort.o ft_strconcat.o\
-		 ft_dir_path.o ft_tabdel.o ft_tabcount.o ft_lstnew_struct.o\
-		 stack_queue/stack.o stack_queue/queue.o
-
+		 ft_tabdel.o ft_tabcount.o ft_lstnew_struct.o\
+		 ft_strisdigit.o stack_queue/stack.o stack_queue/queue.o
 
 P_OBJECT = ft_printf.o help_int.o parse_int.o parse_str.o finder.o type_finder.o\
 			helper.o parse_wstr.o parse_brackets.o
 
 P_OBJ = $(addprefix $(PRINTF_PATH),$(P_OBJECT))
-
-.PHONY: clean fclean re
 
 NAME = libft.a
 
@@ -54,11 +46,15 @@ all: $(NAME)
 $(NAME): $(OBJECT) $(P_OBJ)
 	@ar rcs $(NAME) $(OBJECT) $(P_OBJ) $(HEADER)
 	@ranlib $(NAME)
-	@echo "\x1B[32m\0lib_created\x1B[0m\0"
+	@echo "\n\x1B[32m\0lib_created\x1B[0m\0"
+
+.c.o:
+	@printf "\x1B[32m\0Compile %s\x1B[0m\0\r" $<
+	@$(CC) $(CFLAGS) -c $<  -o $@
 
 clean:
 	@rm -rf $(OBJECT) $(P_OBJ)
-	@echo "\x1B[31m\0objects cleared\x1B[0m\0"
+	@echo "\x1B[31m\0lib objects cleared\x1B[0m\0"
 
 fclean: clean
 	@rm -rf $(NAME)

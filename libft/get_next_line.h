@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_dir_path.c                                      :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/17 19:19:07 by akaplyar          #+#    #+#             */
-/*   Updated: 2017/04/17 19:19:08 by akaplyar         ###   ########.fr       */
+/*   Created: 2017/02/16 19:05:39 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/02/22 16:55:24 by akaplyar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+# include "libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# define BUFF_SIZE 100
 
-char			*ft_dir_path(char *dir, char *name)
+typedef struct		s_mfd
 {
-	char		*tmp;
-	char		*tmp1;
+	char			*content;
+	size_t			content_size;
+	struct s_mfd	*next;
+}					t_mfd;
 
-	tmp = ft_strjoin(dir, "/");
-	tmp1 = ft_strjoin(tmp, name);
-	free(tmp);
-	return (tmp1);
-}
+int					get_next_line(int const fd, char **line);
+int					get_line(int const fd, char **line);
+#endif

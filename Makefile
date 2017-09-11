@@ -11,30 +11,28 @@
 # **************************************************************************** #
 
 HEADER = ft_ls.h
-
-LIB_HEADER = $(LIB_PATH)libft.h
-
-CC = @gcc
-
 LIB_PATH = ./libft/
 
+CC = @gcc
 CFLAGS = -Wall -Wextra -Werror
-
 MAKE_LIB = $(MAKE) -C $(LIB_PATH)
-
-OBJ = main.o ls_print.o ls_process.o ls_sort.o ls_utils.o
 
 .PHONY: clean fclean re
 
+SRC = main.c ls_print.c ls_process.c ls_sort.c ls_utils.c ls_ultims.c
+OBJ = $(SRC:.c=.o)
+
 NAME = ft_ls
 
-all:  lib $(OBJ) $(NAME)
+all:  lib $(NAME)
 
-$(NAME):
+$(NAME): $(OBJ)
 	$(CC) -o $(NAME) $(OBJ) -I $(HEADER) $(LIB_PATH)libft.a
 	@echo "\x1B[32m\0ft_ls created\x1B[0m\0"
 
-$(OBJ): $(HEADER)
+.c.o:
+	@printf "\x1B[32m\0Compile %s\x1B[0m\0\n" $<
+	$(CC) $(CFLAGS) -I $(HEADER) -c $< -o $@
 
 lib:
 	$(MAKE_LIB)

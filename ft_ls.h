@@ -12,6 +12,7 @@
 # include "grp.h"
 
 # define OPT_ERR 0
+# define MLC_ERR 1
 
 typedef struct stat t_stat;
 typedef struct group t_grp;
@@ -24,29 +25,34 @@ typedef struct		s_ls_info
 	char			*path;
 	char			*name;
 	mode_t			mode;
-	nlink_t			links;
+	off_t			size;
 	uid_t			user;
 	gid_t			group;
-	off_t			size;
+	nlink_t			links;
 	blkcnt_t		blocks;
 	time_t			atime;
 }					t_info;
 
 typedef struct		s_ls
 {
-	int				flags[7];
+	int				flags[5];
 	int				width[4];
+	int				opts[3];
 	t_list			*list;
 }					t_ls;
 
 void				ls_params(t_ls *ls);
-void				ls_list(t_info *info, t_ls *ls);
-void				ls_clear(t_ls *ls, t_list *dirs);
+void				ls_list(t_info **info, t_ls *ls);
 void				ls_sort(t_list **list, t_ls *ls);
-void				ls_readdir(t_list *dirs, t_ls *ls);
+void				ls_clear(t_ls *ls, t_list **dirs);
+void				ls_print_dir(t_ls *ls, char *dir);
+void				ls_del_dirs(void *data, size_t size);
+void				ls_errors(int errnum, char *invalid);
 void				ls_file_print(t_info *info, t_ls *ls);
 void				ls_check_width(t_ls *ls, t_info *info);
+void				ls_readdir(t_list **dir_list, t_ls *ls);
 void				ls_file_list(t_ls *ls, char *dir, char *name);
+char				*ls_dir_path(char *dir, char *name);
 t_list				*ls_new_dir(t_info *info);
 
 #endif

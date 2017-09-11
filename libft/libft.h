@@ -17,7 +17,10 @@
 # include "stack_queue/stack_queue.h"
 # include <stdlib.h>
 # include <unistd.h>
+
 # define BUFF_SIZE 100
+# define INTMAX 2147483647
+# define INTMIN -2147483648
 
 typedef struct		s_list
 {
@@ -36,6 +39,8 @@ void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void				ft_lst_sort(t_list **begin, int (*f)(void *e1, void *e2),
 								int count, int max);
+void				ft_lst_sort_size(t_list **begin,
+						int (*f)(size_t e1, size_t e2), int count, int max);
 void				ft_lst_push_back(t_list **alst, t_list *new_node);
 void				*ft_memset(void *b, int c, size_t len);
 void				*ft_memcpy(void *restrict dst, const void *restrict src,
@@ -61,7 +66,7 @@ void				ft_striter(char *s, void (*f)(char *));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 void				ft_strcapitalizer(char *str);
 void				ft_int_sort(int *tab, size_t size);
-void				ft_tabdel(char ***tab, int count);
+void				ft_tabdel(char **tab, int count);
 int					ft_tabcount(char **tab);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 int					ft_atoi(const char *str);
@@ -75,6 +80,7 @@ int					ft_isspace(int c);
 int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
+int					ft_strisdigit(const char *str);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_strequ(const char *s1, const char *s2);
@@ -107,5 +113,4 @@ char				*ft_strrev(char *str);
 char				*ft_realloc(char *str, size_t len);
 char				**ft_strsplit(const char *s, char c);
 char				*ft_strconcat(int count, ...);
-char				*ft_dir_path(char *dir, char *name);
 #endif
