@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static void		ls_bonus_flags(t_ls *ls, char c)
+static void		ls_bonus_flags(t_ls *ls, char c, char *str)
 {
 	if (c == 'c')
 		ls->cu = 1;
@@ -23,8 +23,6 @@ static void		ls_bonus_flags(t_ls *ls, char c)
 		ls->f = 1;
 		ls->a = 1;
 	}
-	else if (c == 'A')
-		ls->a = 2;
 	else if (c == 's')
 		ls->s = 1;
 	else if (c == 'i')
@@ -37,6 +35,8 @@ static void		ls_bonus_flags(t_ls *ls, char c)
 		ls->dog = 1;
 	else if (c == 'n')
 		ls->n = 1;
+	else
+		ls_errors(OPT_ERR, str);
 }
 
 static void		ls_check_flags(t_ls *ls, int *i, int ac, char **av)
@@ -58,8 +58,10 @@ static void		ls_check_flags(t_ls *ls, int *i, int ac, char **av)
 				ls->br = 1;
 			else if (*(av[*i]) == 't')
 				ls->t = 1;
+			else if (*(av[*i]) == 'A')
+				ls->a = 2;
 			else
-				ls_bonus_flags(ls, *(av[*i]));
+				ls_bonus_flags(ls, *(av[*i]), av[*i]);
 			av[*i] += 1;
 		}
 	}
