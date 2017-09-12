@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ls_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/12 21:17:35 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/09/12 21:18:15 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-# define HALF 15778463
-# define DIFF ft_abs(time(NULL) - info->t_time)
+#define HALF 15778463
+#define DIFF ft_abs(time(NULL) - info->t_time)
 
 void				ls_parse_time(t_ls *ls, t_info *info, t_stat *stat)
 {
@@ -15,7 +27,7 @@ void				ls_parse_time(t_ls *ls, t_info *info, t_stat *stat)
 		info->sec = stat->st_mtimespec.tv_nsec;
 	else
 		info->sec = (ls->cu == 1 ?
-					 stat->st_ctimespec.tv_nsec : stat->st_atimespec.tv_nsec);
+				stat->st_ctimespec.tv_nsec : stat->st_atimespec.tv_nsec);
 	if (ls->l)
 	{
 		tmp = ctime(&info->t_time);
@@ -43,7 +55,7 @@ char				ls_manage_xattr(t_info *info)
 		acl = NULL;
 	}
 	if ((info->x_len = listxattr(info->path, info->xattr,
-								 (size_t)info->x_len, XATTR_NOFOLLOW)) > 0)
+					(size_t)info->x_len, XATTR_NOFOLLOW)) > 0)
 		return ('@');
 	else
 	{
@@ -69,7 +81,7 @@ int					ls_find_kb(off_t size)
 
 void				ls_count_size(t_ls *ls)
 {
-	int 			size;
+	int				size;
 	t_info			*info;
 	t_list			*list;
 

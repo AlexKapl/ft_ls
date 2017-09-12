@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/12 21:12:21 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/09/12 21:13:21 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_LS_H
-#define FT_LS_H
+# define FT_LS_H
 
 # include "libft/libft.h"
 # include <sys/types.h>
@@ -16,8 +28,8 @@
 # define OPT_ERR 0
 # define MLC_ERR 1
 
-typedef struct stat t_stat;
-typedef struct dirent t_dir;
+typedef struct stat		t_stat;
+typedef struct dirent	t_dir;
 
 typedef struct		s_ls_info
 {
@@ -48,10 +60,10 @@ typedef struct		s_ls
 	int				cu;
 	int				f;
 	int				i;
-	int 			k;
+	int				k;
 	int				l;
 	int				n;
-	int 			p;
+	int				p;
 	int				r;
 	int				s;
 	int				t;

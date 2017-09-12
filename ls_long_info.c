@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ls_long_info.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/12 21:13:36 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/09/12 21:15:07 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-static char			ls_ex_perm(mode_t mode, int type) {
+static char			ls_ex_perm(mode_t mode, int type)
+{
 	if (!type)
 	{
 		if (S_IXUSR & mode)
@@ -45,9 +58,9 @@ static void			ls_file_info(t_info *info, mode_t mode)
 	info->perm[10] = ls_manage_xattr(info);
 }
 
-static void		ls_check_width_2(t_ls *ls, t_info *info)
+static void			ls_check_width_2(t_ls *ls, t_info *info)
 {
-	int			i;
+	int				i;
 
 	i = (int)ft_strlen(info->user);
 	ls->width[1] = (ls->width[1] < i ? i : ls->width[1]);
@@ -69,9 +82,9 @@ static void		ls_check_width_2(t_ls *ls, t_info *info)
 	}
 }
 
-static void		ls_check_width(t_ls *ls, t_info *info, t_stat *stat)
+static void			ls_check_width(t_ls *ls, t_info *info, t_stat *stat)
 {
-	int			i;
+	int				i;
 
 	if (ls->i)
 	{
@@ -87,16 +100,16 @@ static void		ls_check_width(t_ls *ls, t_info *info, t_stat *stat)
 		return ;
 	i = ft_intlen(info->links);
 	ls->width[0] = (ls->width[0] < i ? i : ls->width[0]);
-	info->user = (ls-> n ? ft_llitoa(stat->st_uid)
-						 : ft_strdup(getpwuid(stat->st_uid)->pw_name));
+	info->user = (ls->n ? ft_llitoa(stat->st_uid)
+						: ft_strdup(getpwuid(stat->st_uid)->pw_name));
 	info->group = (ls->n ? ft_llitoa(stat->st_gid)
-						 : ft_strdup(getgrgid(stat->st_gid)->gr_name));
+						: ft_strdup(getgrgid(stat->st_gid)->gr_name));
 	ls_check_width_2(ls, info);
 }
 
-void			ls_long_info(t_ls *ls, t_info *info, t_stat *stat)
+void				ls_long_info(t_ls *ls, t_info *info, t_stat *stat)
 {
-	if (ls-> k)
+	if (ls->k)
 		info->blocks = ls_find_kb(info->size);
 	if (!ls->l)
 	{
@@ -119,4 +132,3 @@ void			ls_long_info(t_ls *ls, t_info *info, t_stat *stat)
 	}
 	ls_check_width(ls, info, stat);
 }
-

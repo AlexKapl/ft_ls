@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ls_memory.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/12 21:15:19 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/09/12 21:16:04 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
 void			ls_errors(int errnum, char *invalid)
 {
 	if (errnum == OPT_ERR)
 		ft_printf("{fd}ft_ls: illegal option -- %.1s\n%s{eofd}", 2, invalid,
-				  "usage: ft_ls [-ARacfiklnprstu1@] [file ...]\n");
+							"usage: ft_ls [-ARacfiklnprstu1@] [file ...]\n");
 	else if (errnum == MLC_ERR)
 		ft_printf("{fd}Error: can't allocate memory\n{eofd}", 2);
 	exit(errnum);
@@ -24,9 +36,9 @@ char			*ls_dir_path(char *dir, char *name)
 	}
 }
 
-void		ls_list(t_info **info, t_ls *ls)
+void			ls_list(t_info **info, t_ls *ls)
 {
-	t_list	*node;
+	t_list		*node;
 
 	if (!(node = (t_list*)malloc(sizeof(t_list))))
 		ls_errors(MLC_ERR, NULL);
@@ -41,9 +53,9 @@ void		ls_list(t_info **info, t_ls *ls)
 	ft_lst_push_back(&ls->list, node);
 }
 
-t_list		*ls_new_dir(t_info *info)
+t_list			*ls_new_dir(t_info *info)
 {
-	t_list	*node;
+	t_list		*node;
 
 	if (!(node = (t_list*)malloc(sizeof(t_list))))
 		ls_errors(MLC_ERR, NULL);
@@ -54,10 +66,10 @@ t_list		*ls_new_dir(t_info *info)
 	return (node);
 }
 
-void		ls_del(void *data, size_t size)
+void			ls_del(void *data, size_t size)
 {
-	t_info	*info;
-	char	*dir;
+	t_info		*info;
+	char		*dir;
 
 	if (size)
 	{

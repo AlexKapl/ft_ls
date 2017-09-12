@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ls_print.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/12 21:16:12 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/09/12 21:16:49 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
 static void			ls_print_xattr(t_info *info)
@@ -11,11 +23,11 @@ static void			ls_print_xattr(t_info *info)
 	while (i < info->x_len)
 	{
 		if ((ret = getxattr(info->path, info->xattr + i,
-							str, 0, 0, XATTR_NOFOLLOW)) < 0)
+						str, 0, 0, XATTR_NOFOLLOW)) < 0)
 			return ;
 		str = ft_strnew((size_t)ret);
 		ret = getxattr(info->path, info->xattr + i,
-					   str, (size_t)ret, 0, XATTR_NOFOLLOW);
+						str, (size_t)ret, 0, XATTR_NOFOLLOW);
 		ft_printf("\t%s\t   %i\n", info->xattr + i, ret);
 		i += ft_strlen(&info->xattr[i]) + 1;
 		ft_memdel((void**)&str);
