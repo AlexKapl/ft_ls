@@ -24,7 +24,7 @@ static char			ls_ex_perm(mode_t mode, int type) {
 	}
 }
 
-static void			ls_file_info(mode_t mode, t_info *info)
+static void			ls_file_info(t_info *info, mode_t mode)
 {
 	info->perm[0] = (char)(S_ISREG(mode) ? '-' : info->perm[0]);
 	info->perm[0] = (char)(S_ISDIR(mode) ? 'd' : info->perm[0]);
@@ -42,12 +42,17 @@ static void			ls_file_info(mode_t mode, t_info *info)
 	info->perm[7] = (char)(mode & S_IROTH ? 'r' : '-');
 	info->perm[8] = (char)(mode & S_IWOTH ? 'w' : '-');
 	info->perm[9] = ls_ex_perm(mode, 2);
+	info->perm[10] = ls_manage_xattr(info);
 }
 
-static void		ls_check_blocks_width(t_ls *ls, t_info *info)
+static void		ls_check_width_2(t_ls *ls, t_info *info)
 {
 	int			i;
 
+	i = (int)ft_strlen(info->user);
+	ls->width[1] = (ls->width[1] < i ? i : ls->width[1]);
+	i = (int)ft_strlen(info->group);
+	ls->width[2] = (ls->width[2] < i ? i : ls->width[2]);
 	if (info->major == -1)
 	{
 		i = ft_intlen(info->size);
@@ -64,7 +69,7 @@ static void		ls_check_blocks_width(t_ls *ls, t_info *info)
 	}
 }
 
-static void		ls_check_width(t_ls *ls, t_info *info)
+static void		ls_check_width(t_ls *ls, t_info *info, t_stat *stat)
 {
 	int			i;
 
@@ -82,11 +87,11 @@ static void		ls_check_width(t_ls *ls, t_info *info)
 		return ;
 	i = ft_intlen(info->links);
 	ls->width[0] = (ls->width[0] < i ? i : ls->width[0]);
-	i = (int)ft_strlen(info->user);
-	ls->width[1] = (ls->width[1] < i ? i : ls->width[1]);
-	i = (int)ft_strlen(info->group);
-	ls->width[2] = (ls->width[2] < i ? i : ls->width[2]);
-	ls_check_blocks_width(ls, info);
+	info->user = (ls-> n ? ft_llitoa(stat->st_uid)
+						 : ft_strdup(getpwuid(stat->st_uid)->pw_name));
+	info->group = (ls->n ? ft_llitoa(stat->st_gid)
+						 : ft_strdup(getgrgid(stat->st_gid)->gr_name));
+	ls_check_width_2(ls, info);
 }
 
 void			ls_long_info(t_ls *ls, t_info *info, t_stat *stat)
@@ -95,11 +100,13 @@ void			ls_long_info(t_ls *ls, t_info *info, t_stat *stat)
 		info->blocks = ls_find_kb(info->size);
 	if (!ls->l)
 	{
-		ls_check_width(ls, info);
+		ls_check_width(ls, info, stat);
 		return ;
 	}
-	info->perm = ft_strnew(11);
-	ls_file_info(info->mode, info);
+	info->perm = ft_strnew(12);
+	ls_file_info(info, info->mode);
+	if (!ls->dog)
+		ft_memdel((void**)&info->xattr);
 	if (*info->perm == 'b' || *info->perm == 'c')
 	{
 		info->major = major(stat->st_rdev);
@@ -110,6 +117,6 @@ void			ls_long_info(t_ls *ls, t_info *info, t_stat *stat)
 		info->major = -1;
 		info->minor = -1;
 	}
-	ls_check_width(ls, info);
+	ls_check_width(ls, info, stat);
 }
 

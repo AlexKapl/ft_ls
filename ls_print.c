@@ -1,10 +1,32 @@
 #include "ft_ls.h"
 
+static void			ls_print_xattr(t_info *info)
+{
+	ssize_t			i;
+	ssize_t			ret;
+	char			*str;
+
+	i = 0;
+	str = NULL;
+	while (i < info->x_len)
+	{
+		if ((ret = getxattr(info->path, info->xattr + i,
+							str, 0, 0, XATTR_NOFOLLOW)) < 0)
+			return ;
+		str = ft_strnew((size_t)ret);
+		ret = getxattr(info->path, info->xattr + i,
+					   str, (size_t)ret, 0, XATTR_NOFOLLOW);
+		ft_printf("\t%s\t   %i\n", info->xattr + i, ret);
+		i += ft_strlen(&info->xattr[i]) + 1;
+		ft_memdel((void**)&str);
+	}
+}
+
 static void			ls_print_info(t_ls *ls, t_info *in)
 {
 	char			*tmp;
 
-	ft_printf("%s  %*d ", in->perm, ls->width[0], in->links);
+	ft_printf("%s %*d ", in->perm, ls->width[0], in->links);
 	ft_printf("%-*s  %-*s  ", ls->width[1], in->user, ls->width[2], in->group);
 	if (in->major == -1)
 		ft_printf("%*d", ls->width[3], in->size);
@@ -23,6 +45,8 @@ static void			ls_print_info(t_ls *ls, t_info *in)
 		free(tmp);
 	}
 	ft_printf("\n");
+	if (ls->dog)
+		ls_print_xattr(in);
 }
 
 void				ls_file_print(t_info *info, t_ls *ls)

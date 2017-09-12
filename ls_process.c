@@ -15,8 +15,6 @@ void		ls_file_list(t_ls *ls, char *dir, char *name)
 		info->mode = stat.st_mode;
 		info->inode = stat.st_ino;
 		info->size = stat.st_size;
-		info->user = ft_strdup(getpwuid(stat.st_uid)->pw_name);
-		info->group = ft_strdup(getgrgid(stat.st_gid)->gr_name);
 		info->links = stat.st_nlink;
 		info->blocks = stat.st_blocks;
 		ls_parse_time(ls, info, &stat);
@@ -88,7 +86,7 @@ void		ls_readdir(t_list **dir_list, t_ls *ls)
 			ft_printf("ft_ls: %s: %s\n", dirs->content, strerror(errno));
 		dirs = dirs->next;
 	}
-	ft_lstdel(dir_list, ls_del_dirs);
+	ft_lstdel(dir_list, ls_del);
 }
 
 void		ls_params(t_ls *ls)

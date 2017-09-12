@@ -3,7 +3,7 @@ project(ft_ls)
 
 set(CMAKE_C_STANDARD 99)
 
-set(SOURCE_FILES main.c ft_ls.h ls_process.c ls_print.c ls_sort.c ls_utils.c ls_utils2.c ls_utils3.c)
+set(SOURCE_FILES main.c ft_ls.h ls_process.c ls_print.c ls_sort.c ls_memory.c ls_utils.c ls_long_info.c)
 
 add_executable(ft_ls ${SOURCE_FILES})
 target_link_libraries(ft_ls ${CMAKE_SOURCE_DIR}/libft/libft.a)

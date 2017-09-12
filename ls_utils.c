@@ -1,59 +1,92 @@
 #include "ft_ls.h"
 
-void		ls_list(t_info **info, t_ls *ls)
-{
-	t_list	*node;
+# define HALF 15778463
+# define DIFF ft_abs(time(NULL) - info->t_time)
 
-	if (!(node = (t_list*)malloc(sizeof(t_list))))
-		ls_errors(MLC_ERR, NULL);
-	if (!ls->l)
+void				ls_parse_time(t_ls *ls, t_info *info, t_stat *stat)
+{
+	char			*tmp;
+
+	if (!ls->cu)
+		info->t_time = stat->st_mtime;
+	else
+		info->t_time = (ls->cu == 1 ? stat->st_ctime : stat->st_atime);
+	if (!ls->cu)
+		info->sec = stat->st_mtimespec.tv_nsec;
+	else
+		info->sec = (ls->cu == 1 ?
+					 stat->st_ctimespec.tv_nsec : stat->st_atimespec.tv_nsec);
+	if (ls->l)
 	{
-		(*info)->time = NULL;
-		(*info)->perm = NULL;
-	}
-	node->content = (void*)*info;
-	node->content_size = 0;
-	node->next = NULL;
-	ft_lst_push_back(&ls->list, node);
-}
-
-t_list		*ls_new_dir(t_info *info)
-{
-	t_list	*node;
-
-	if (!(node = (t_list*)malloc(sizeof(t_list))))
-		ls_errors(MLC_ERR, NULL);
-	node->content = (void*)ft_strdup(info->path);
-	node->content_size = 0;
-	node->next = NULL;
-	return (node);
-}
-
-void			ls_del_dirs(void *data, size_t size)
-{
-	char		*name;
-
-	(void)size;
-	name = (char*)data;
-	if (name)
-		free(name);
-}
-
-static void	ls_del(void *data, size_t size)
-{
-	t_info	*info;
-
-	info = (t_info*)data;
-	(void)size;
-	if (info)
-	{
-		free(info->path);
-		free(info->name);
-		free(info);
+		tmp = ctime(&info->t_time);
+		if (DIFF > HALF)
+		{
+			info->time = ft_strsub(tmp, 4, 7);
+			tmp = ft_strsub(tmp, 19, 5);
+			info->time = ft_strmake(&info->time, &tmp, 3);
+		}
+		else
+			info->time = ft_strsub(tmp, 4, 12);
 	}
 }
 
-void		ls_clear(t_ls *ls, t_list **dirs)
+char				ls_manage_xattr(t_info *info)
+{
+	acl_t		acl;
+
+	info->xattr = (char*)ft_memalloc(10101);
+	info->x_len = 10100;
+	acl = acl_get_link_np(info->path, ACL_TYPE_EXTENDED);
+	if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, NULL))
+	{
+		acl_free(acl);
+		acl = NULL;
+	}
+	if ((info->x_len = listxattr(info->path, info->xattr,
+								 (size_t)info->x_len, XATTR_NOFOLLOW)) > 0)
+		return ('@');
+	else
+	{
+		info->x_len = 0;
+		return ((char)(acl ? '+' : ' '));
+	}
+}
+
+int					ls_find_kb(off_t size)
+{
+	int				i;
+	int				s;
+
+	i = 0;
+	s = 0;
+	while (s < size)
+	{
+		s += 1024;
+		i++;
+	}
+	return (i);
+}
+
+void				ls_count_size(t_ls *ls)
+{
+	int 			size;
+	t_info			*info;
+	t_list			*list;
+
+	size = 0;
+	list = ls->list;
+	while (list)
+	{
+		info = (t_info *)list->content;
+		size += (ls->k ? info->size : info->blocks);
+		list = list->next;
+	}
+	if (ls->k)
+		size = ls_find_kb(size);
+	ft_printf("total %d\n", size);
+}
+
+void				ls_clear(t_ls *ls, t_list **dirs)
 {
 	ls->width[0] = 0;
 	ls->width[1] = 0;
@@ -71,5 +104,5 @@ void		ls_clear(t_ls *ls, t_list **dirs)
 		ls_readdir(dirs, ls);
 	}
 	else
-		ft_lstdel(dirs, ls_del_dirs);
+		ft_lstdel(dirs, ls_del);
 }

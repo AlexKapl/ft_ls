@@ -21,6 +21,10 @@ static void		ls_bonus_flags(t_ls *ls, char c)
 		ls->p = 1;
 	else if (c == 'k')
 		ls->k = 1;
+	else if (c == '@')
+		ls->dog = 1;
+	else if (c == 'n')
+		ls->n = 1;
 }
 
 static void		ls_check_flags(t_ls *ls, int *i, int ac, char **av)
@@ -48,26 +52,25 @@ static void		ls_check_flags(t_ls *ls, int *i, int ac, char **av)
 		}
 	}
 }
-/// k? | c?+ | @? | u?+
-/// p+ | f+ | A+ | i+ | s+
+/// k± | c+ | @+ | u+ | s+
+/// p+ | f+ | A+ | i+ | n+
 
 static void		ls_init(t_ls *ls)
 {
 	ls->list = NULL;
-	ls->l = 0;
 	ls->a = 0;
 	ls->cu = 0;
 	ls->f = 0;
 	ls->i = 0;
 	ls->k = 0;
+	ls->l = 0;
+	ls->n = 0;
 	ls->p = 0;
 	ls->r = 0;
 	ls->s = 0;
 	ls->t = 0;
 	ls->br = 0;
-	ls->opts[0] = 0;
-	ls->opts[1] = 0;
-	ls->opts[2] = 0;
+	ls->dog = 0;
 	ls->width[0] = 0;
 	ls->width[1] = 0;
 	ls->width[2] = 0;
@@ -99,7 +102,7 @@ static void		ls_check_params(t_ls *ls, int i, int ac, char **av)
 		if (ft_lstcount(ls->list) == 1)
 		{
 			ls->opts[1] = 0;
-			list = ft_lstnew(av[i - 1], ft_strlen(av[i - 1]));
+			list = ft_lstnew(av[i - 1], ft_strlen(av[i - 1]) + 1);
 			ls_clear(ls, &list);
 		}
 		else
@@ -114,6 +117,9 @@ int				main(int ac, char **av)
 
 	i = 0;
 	ls_init(&ls);
+	ls.opts[0] = 0;
+	ls.opts[1] = 0;
+	ls.opts[2] = 0;
 	ls_check_flags(&ls, &i, ac, av);
 	ls_check_params(&ls, i, ac, av);
 	return (0);
