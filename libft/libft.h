@@ -80,6 +80,7 @@ int					ft_isspace(int c);
 int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
+int					ft_intlen(long long num);
 int					ft_strisdigit(const char *str);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -112,5 +113,6 @@ char				*ft_strtrim(const char *s);
 char				*ft_strrev(char *str);
 char				*ft_realloc(char *str, size_t len);
 char				**ft_strsplit(const char *s, char c);
+char				*ft_strmake(char **s1, char **s2, int del);
 char				*ft_strconcat(int count, ...);
 #endif

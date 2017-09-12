@@ -1,13 +1,26 @@
 #include "ft_ls.h"
 
-void			ls_errors(int errnum, char *invalid)
+static void		ls_bonus_flags(t_ls *ls, char c)
 {
-	if (errnum == OPT_ERR)
-		ft_printf("{fd}ft_ls: illegal option -- %.1s\n%s{eofd}", 2, invalid,
-								"usage: ft_ls [-Ralrt] [file ...]\n");
-	else if (errnum == MLC_ERR)
-		ft_printf("{fd}Error: can't allocate memory\n{eofd}", 2);
-	exit(errnum);
+	if (c == 'c')
+		ls->cu = 1;
+	else if (c == 'u')
+		ls->cu = 2;
+	else if (c == 'f')
+	{
+		ls->f = 1;
+		ls->a = 1;
+	}
+	else if (c == 'A')
+		ls->a = 2;
+	else if (c == 's')
+		ls->s = 1;
+	else if (c == 'i')
+		ls->i = 1;
+	else if (c == 'p')
+		ls->p = 1;
+	else if (c == 'k')
+		ls->k = 1;
 }
 
 static void		ls_check_flags(t_ls *ls, int *i, int ac, char **av)
@@ -18,25 +31,40 @@ static void		ls_check_flags(t_ls *ls, int *i, int ac, char **av)
 		while (*(av[*i]))
 		{
 			if (*(av[*i]) == 'l')
-				ls->flags[0] = 1;
+				ls->l = 1;
+			else if (*(av[*i]) == '1')
+				ls->l = 0;
 			else if (*(av[*i]) == 'a')
-				ls->flags[1] = 1;
+				ls->a = 1;
 			else if (*(av[*i]) == 'r')
-				ls->flags[2] = 1;
+				ls->r = 1;
 			else if (*(av[*i]) == 'R')
-				ls->flags[3] = 1;
+				ls->br = 1;
 			else if (*(av[*i]) == 't')
-				ls->flags[4] = 1;
-			else if (*(av[*i]) != '1')
-				ls_errors(OPT_ERR, av[*i]);
+				ls->t = 1;
+			else
+				ls_bonus_flags(ls, *(av[*i]));
 			av[*i] += 1;
 		}
 	}
 }
+/// k? | c?+ | @? | u?+
+/// p+ | f+ | A+ | i+ | s+
 
 static void		ls_init(t_ls *ls)
 {
 	ls->list = NULL;
+	ls->l = 0;
+	ls->a = 0;
+	ls->cu = 0;
+	ls->f = 0;
+	ls->i = 0;
+	ls->k = 0;
+	ls->p = 0;
+	ls->r = 0;
+	ls->s = 0;
+	ls->t = 0;
+	ls->br = 0;
 	ls->opts[0] = 0;
 	ls->opts[1] = 0;
 	ls->opts[2] = 0;
@@ -44,11 +72,10 @@ static void		ls_init(t_ls *ls)
 	ls->width[1] = 0;
 	ls->width[2] = 0;
 	ls->width[3] = 0;
-	ls->flags[0] = 0;
-	ls->flags[1] = 0;
-	ls->flags[2] = 0;
-	ls->flags[3] = 0;
-	ls->flags[4] = 0;
+	ls->width[4] = 0;
+	ls->width[5] = 0;
+	ls->width[6] = 0;
+	ls->width[7] = 0;
 }
 
 static void		ls_check_params(t_ls *ls, int i, int ac, char **av)

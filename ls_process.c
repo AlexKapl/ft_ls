@@ -5,22 +5,22 @@ void		ls_file_list(t_ls *ls, char *dir, char *name)
 	t_stat	stat;
 	t_info	*info;
 
-	if (!(info = (t_info*)malloc(sizeof(t_info))))
-		ls_errors(MLC_ERR, NULL);
-	info->err = 0;
-	if (!(info->path = ls_dir_path(dir, name)) ||
-			!(info->name = ft_strdup(name)))
+	if (!(info = (t_info*)malloc(sizeof(t_info))) ||
+		(!(info->path = ls_dir_path(dir, name)) ||
+			!(info->name = ft_strdup(name))))
 		ls_errors(MLC_ERR, NULL);
 	if (!lstat(info->path, &stat))
 	{
+		info->err = 0;
 		info->mode = stat.st_mode;
+		info->inode = stat.st_ino;
 		info->size = stat.st_size;
-		info->user = stat.st_uid;
-		info->group = stat.st_gid;
+		info->user = ft_strdup(getpwuid(stat.st_uid)->pw_name);
+		info->group = ft_strdup(getgrgid(stat.st_gid)->gr_name);
 		info->links = stat.st_nlink;
 		info->blocks = stat.st_blocks;
-		info->atime = stat.st_mtimespec.tv_sec;
-		ls_check_width(ls, info);
+		ls_parse_time(ls, info, &stat);
+		ls_long_info(ls, info, &stat);
 	}
 	else
 		info->err = errno;
@@ -56,7 +56,12 @@ static void	ls_readfile(t_ls *ls, DIR *dir, char *path)
 	{
 		if (file->d_name[0] == '.')
 		{
-			if (ls->flags[1])
+			if (ft_strequ(file->d_name, ".") || ft_strequ(file->d_name, ".."))
+			{
+				if (ls->a == 1)
+					ls_file_list(ls, path, file->d_name);
+			}
+			else if (ls->a)
 				ls_file_list(ls, path, file->d_name);
 		}
 		else
@@ -77,10 +82,10 @@ void		ls_readdir(t_list **dir_list, t_ls *ls)
 			ls_readfile(ls, dir, dirs->content);
 			ls_print_dir(ls, dirs->content);
 			ls_iterate(ls);
+			closedir(dir);
 		}
 		else
 			ft_printf("ft_ls: %s: %s\n", dirs->content, strerror(errno));
-		free(dir);
 		dirs = dirs->next;
 	}
 	ft_lstdel(dir_list, ls_del_dirs);
