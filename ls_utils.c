@@ -46,27 +46,27 @@ char				ls_manage_xattr(t_info *info)
 {
 	char		c;
 	acl_t		acl;
+	acl_entry_t e;
 
 	info->xattr = (char*)ft_memalloc(10101);
 	info->x_len = 10100;
+	e = NULL;
 	acl = acl_get_link_np(info->path, ACL_TYPE_EXTENDED);
-	if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, NULL))
+	if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &e))
 	{
 		acl_free(acl);
 		acl = NULL;
 	}
 	if ((info->x_len = listxattr(info->path, info->xattr,
 					(size_t)info->x_len, XATTR_NOFOLLOW)) > 0)
-	{
-		acl_free(acl);
 		c = '@';
-	}
 	else
 	{
 		info->x_len = 0;
 		c = (char)(acl ? '+' : ' ');
-		acl_free(acl);
 	}
+	if (acl)
+		free(acl);
 	return (c);
 }
 

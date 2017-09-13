@@ -26,13 +26,18 @@ char			*ls_dir_path(char *dir, char *name)
 {
 	char		*tmp;
 
-	if (ft_strequ(dir, ".") || ft_strequ(name, "/"))
+	if (ft_strequ(dir, "."))
 		return (ft_strdup(name));
 	else
 	{
-		tmp = ft_strjoin(dir, "/");
-		tmp = ft_strmake(&tmp, &name, 1);
-		return (tmp);
+		if (!ft_strequ(dir, "/"))
+		{
+			tmp = ft_strjoin(dir, "/");
+			tmp = ft_strmake(&tmp, &name, 1);
+			return (tmp);
+		}
+		else
+			return (ft_strjoin(dir, name));
 	}
 }
 
