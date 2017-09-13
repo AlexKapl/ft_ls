@@ -26,7 +26,7 @@ static void			ls_print_xattr(t_info *info)
 						str, 0, 0, XATTR_NOFOLLOW)) < 0)
 		{
 			ft_memdel((void**)&info->xattr);
-			return;
+			return ;
 		}
 		if (str)
 			ft_memdel((void**)&str);

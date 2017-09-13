@@ -51,6 +51,8 @@ void			ls_list(t_info **info, t_ls *ls)
 	{
 		(*info)->time = NULL;
 		(*info)->perm = NULL;
+		(*info)->user = NULL;
+		(*info)->group = NULL;
 	}
 	node->content = (void*)*info;
 	node->content_size = 0;
