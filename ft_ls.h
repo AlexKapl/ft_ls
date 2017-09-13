@@ -36,6 +36,7 @@ typedef struct		s_ls_info
 	int				err;
 	int				major;
 	int				minor;
+	int				rt;
 	long			sec;
 	char			*path;
 	char			*name;

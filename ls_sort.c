@@ -53,6 +53,7 @@ static int	ls_reverse_cmp(void *data1, void *data2)
 
 static int	ls_time_cmp(void *data1, void *data2)
 {
+	int		i;
 	t_info	*cur;
 	t_info	*next;
 
@@ -62,15 +63,17 @@ static int	ls_time_cmp(void *data1, void *data2)
 		return (ls_error_cmp(data1, data2));
 	else
 	{
+		i = (cur->t_time > next->t_time ? 0 : 1);
 		if (cur->t_time == next->t_time)
 		{
+			i = (cur->sec > next->sec ? 0 : 1);
 			if (cur->sec == next->sec)
 				return (ft_strcmp(cur->name, next->name) < 0 ? 1 : 0);
 			else
-				return (cur->sec > next->sec ? 0 : 1);
+				return (cur->rt ? !i : i);
 		}
 		else
-			return (cur->t_time > next->t_time ? 0 : 1);
+			return (cur->rt ? !i : i);
 	}
 }
 
