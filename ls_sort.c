@@ -76,10 +76,10 @@ static int	ls_time_cmp(void *data1, void *data2)
 
 void		ls_sort(t_list **list, t_ls *ls)
 {
-	if (ls->r)
-		ft_lst_sort(list, ls_reverse_cmp, 0, (int)ft_lstcount(*list));
-	else if (ls->t)
+	if (ls->t)
 		ft_lst_sort(list, ls_time_cmp, 0, (int)ft_lstcount(*list));
+	else if (ls->r)
+		ft_lst_sort(list, ls_reverse_cmp, 0, (int)ft_lstcount(*list));
 	else if (ls->f)
 		ft_lst_sort(list, ls_error_cmp, 0, (int)ft_lstcount(*list));
 	else

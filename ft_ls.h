@@ -34,6 +34,9 @@ typedef struct dirent	t_dir;
 typedef struct		s_ls_info
 {
 	int				err;
+	int				major;
+	int				minor;
+	long			sec;
 	char			*path;
 	char			*name;
 	char			*time;
@@ -43,14 +46,11 @@ typedef struct		s_ls_info
 	char			*xattr;
 	ssize_t			x_len;
 	mode_t			mode;
-	ino_t			inode;
 	off_t			size;
+	ino_t			inode;
 	nlink_t			links;
 	blkcnt_t		blocks;
 	time_t			t_time;
-	int				major;
-	int				minor;
-	long			sec;
 }					t_info;
 
 typedef struct		s_ls

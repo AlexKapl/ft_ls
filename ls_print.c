@@ -24,7 +24,12 @@ static void			ls_print_xattr(t_info *info)
 	{
 		if ((ret = getxattr(info->path, info->xattr + i,
 						str, 0, 0, XATTR_NOFOLLOW)) < 0)
-			return ;
+		{
+			ft_memdel((void**)&info->xattr);
+			return;
+		}
+		if (str)
+			ft_memdel((void**)&str);
 		str = ft_strnew((size_t)ret);
 		ret = getxattr(info->path, info->xattr + i,
 						str, (size_t)ret, 0, XATTR_NOFOLLOW);
@@ -32,6 +37,7 @@ static void			ls_print_xattr(t_info *info)
 		i += ft_strlen(&info->xattr[i]) + 1;
 		ft_memdel((void**)&str);
 	}
+	ft_memdel((void**)&info->xattr);
 }
 
 static void			ls_print_info(t_ls *ls, t_info *in)

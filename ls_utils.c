@@ -44,6 +44,7 @@ void				ls_parse_time(t_ls *ls, t_info *info, t_stat *stat)
 
 char				ls_manage_xattr(t_info *info)
 {
+	char		c;
 	acl_t		acl;
 
 	info->xattr = (char*)ft_memalloc(10101);
@@ -56,12 +57,17 @@ char				ls_manage_xattr(t_info *info)
 	}
 	if ((info->x_len = listxattr(info->path, info->xattr,
 					(size_t)info->x_len, XATTR_NOFOLLOW)) > 0)
-		return ('@');
+	{
+		acl_free(acl);
+		c = '@';
+	}
 	else
 	{
 		info->x_len = 0;
-		return ((char)(acl ? '+' : ' '));
+		c = (char)(acl ? '+' : ' ');
+		acl_free(acl);
 	}
+	return (c);
 }
 
 int					ls_find_kb(off_t size)
