@@ -69,25 +69,20 @@ static void			ls_print_info(t_ls *ls, t_info *in)
 
 void				ls_file_print(t_info *info, t_ls *ls)
 {
-	char			*str;
-
 	if (info->err)
-	{
-		ft_printf("ft_ls: %s: %s\n", info->name, (str = strerror(info->err)));
-		free(str);
-	}
+		ft_printf("ft_ls: %s: %s\n", info->name, strerror(info->err));
 	else
 	{
 		if (ls->i)
 			ft_printf("%*d ", ls->width[7], info->inode);
 		if (ls->s)
-			ft_printf(" %*d ", ls->width[6], info->blocks);
+			ft_printf("%*d ", ls->width[6], info->blocks);
 		if (ls->l)
 			ls_print_info(ls, info);
 		else
 		{
 			if (ls->p)
-				ft_printf((*info->perm == 'd' ? "%s/\n" : "%s\n"), info->name);
+				ft_printf((S_ISDIR(info->mode) ? "%s/\n" : "%s\n"), info->name);
 			else
 				ft_printf("%s\n", info->name);
 		}

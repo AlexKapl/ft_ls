@@ -36,7 +36,7 @@ typedef struct		s_ls_info
 	int				err;
 	int				major;
 	int				minor;
-	int				rt;
+	int				r;
 	long			sec;
 	char			*path;
 	char			*name;
@@ -57,6 +57,7 @@ typedef struct		s_ls_info
 typedef struct		s_ls
 {
 	int				br;
+	int 			bs;
 	int				a;
 	int				cu;
 	int				f;
@@ -88,6 +89,7 @@ void				ls_readdir(t_list **dir_list, t_ls *ls);
 void				ls_file_list(t_ls *ls, char *dir, char *name);
 void				ls_long_info(t_ls *ls, t_info *info, t_stat *stat);
 void				ls_parse_time(t_ls *ls, t_info *info, t_stat *stat);
+void				ls_check_flags(t_ls *ls, int *i, int ac, char **av);
 char				ls_manage_xattr(t_info *info);
 char				*ls_dir_path(char *dir, char *name);
 t_list				*ls_new_dir(t_info *info);

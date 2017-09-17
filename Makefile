@@ -20,7 +20,7 @@ MAKE_LIB = $(MAKE) -C $(LIB_PATH)
 .PHONY: clean fclean re
 
 SRC = main.c ls_print.c ls_process.c ls_sort.c\
-		ls_memory.c ls_utils.c ls_long_info.c
+		ls_memory.c ls_utils.c ls_flags.c ls_long_info.c
 OBJ = $(SRC:.c=.o)
 
 NAME = ft_ls

@@ -12,61 +12,6 @@
 
 #include "ft_ls.h"
 
-static void		ls_bonus_flags(t_ls *ls, char c, char *str)
-{
-	if (c == 'c')
-		ls->cu = 1;
-	else if (c == 'u')
-		ls->cu = 2;
-	else if (c == 'f')
-	{
-		ls->f = 1;
-		ls->a = 1;
-	}
-	else if (c == 's')
-		ls->s = 1;
-	else if (c == 'i')
-		ls->i = 1;
-	else if (c == 'p')
-		ls->p = 1;
-	else if (c == 'k')
-		ls->k = 1;
-	else if (c == '@')
-		ls->dog = 1;
-	else if (c == 'n')
-		ls->n = 1;
-	else
-		ls_errors(OPT_ERR, str);
-}
-
-static void		ls_check_flags(t_ls *ls, int *i, int ac, char **av)
-{
-	while (++*i < ac && av[*i][0] == '-')
-	{
-		av[*i] += 1;
-		while (*(av[*i]))
-		{
-			if (*(av[*i]) == 'l')
-				ls->l = 1;
-			else if (*(av[*i]) == '1')
-				ls->l = 0;
-			else if (*(av[*i]) == 'a')
-				ls->a = 1;
-			else if (*(av[*i]) == 'r')
-				ls->r = 1;
-			else if (*(av[*i]) == 'R')
-				ls->br = 1;
-			else if (*(av[*i]) == 't')
-				ls->t = 1;
-			else if (*(av[*i]) == 'A')
-				ls->a = 2;
-			else
-				ls_bonus_flags(ls, *(av[*i]), av[*i]);
-			av[*i] += 1;
-		}
-	}
-}
-
 static void		ls_init(t_ls *ls)
 {
 	ls->list = NULL;
@@ -82,6 +27,7 @@ static void		ls_init(t_ls *ls)
 	ls->s = 0;
 	ls->t = 0;
 	ls->br = 0;
+	ls->bs = 0;
 	ls->dog = 0;
 	ls->width[0] = 0;
 	ls->width[1] = 0;

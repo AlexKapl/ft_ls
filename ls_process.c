@@ -24,7 +24,7 @@ void		ls_file_list(t_ls *ls, char *dir, char *name)
 	if (!lstat(info->path, &stat))
 	{
 		info->err = 0;
-		info->rt = (ls->r && ls->t ? 1 : 0);
+		info->r = ls->r;
 		info->mode = stat.st_mode;
 		info->inode = stat.st_ino;
 		info->size = stat.st_size;

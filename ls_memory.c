@@ -16,7 +16,7 @@ void			ls_errors(int errnum, char *invalid)
 {
 	if (errnum == OPT_ERR)
 		ft_printf("{fd}ft_ls: illegal option -- %.1s\n%s{eofd}", 2, invalid,
-							"usage: ft_ls [-ARacfiklnprstu1@] [file ...]\n");
+							"usage: ft_ls [-ARSacfiklnprstu1@] [file ...]\n");
 	else if (errnum == MLC_ERR)
 		ft_printf("{fd}Error: can't allocate memory\n{eofd}", 2);
 	exit(errnum);
@@ -47,7 +47,7 @@ void			ls_list(t_info **info, t_ls *ls)
 
 	if (!(node = (t_list*)malloc(sizeof(t_list))))
 		ls_errors(MLC_ERR, NULL);
-	if (!ls->l)
+	if (!ls->l || (*info)->err)
 	{
 		(*info)->time = NULL;
 		(*info)->perm = NULL;
